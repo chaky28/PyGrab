@@ -1,0 +1,57 @@
+{
+  "general_info": {
+    "package_name": "Test",
+    "browser_mode": "BROWSER",
+    "export": {
+      "encoding": "UTF8",
+      "format": "CSV"
+    }
+  },
+  "input_data": {
+    "input_type": "url_list",
+    "input_value": "https://www.cetrogar.com.ar/electrodomesticos/climatizacion/calefaccion.html"
+  },
+  "driver_options":
+    [
+      {"window_size": "1600x1600"}
+    ]
+  ,
+  "export_settings": {
+    "export_type": "CSV"
+  },
+  "items": [
+    {
+      "item_type": "item_list",
+      "locator_type": "XPATH",
+      "locator_value": "//OL[contains(@class,'products items')]/LI",
+      "name": "PA1",
+      "items": [
+          {
+            "item_type": "picker",
+            "item_name": "_ID",
+            "locator_type": "XPATH",
+            "locator_value": ".//DIV[@data-product-id]",
+            "locator_attribute": "data-product-id"
+          },
+          {
+            "item_type": "picker",
+            "item_name": "_PRODUCT",
+            "locator_type": "XPATH",
+            "locator_value": ".//DIV[@class=\"product name product-item-name\"]"
+          }
+      ]
+    },
+    {
+      "item_type": "pagination",
+      "name": "Pagination",
+      "locator_type": "XPATH",
+      "locator_value": "//div[@class=\"column main\"]/div[last()]//li[@class=\"item pages-item-next\"]/a",
+      "repeat_item_list": "PA1",
+      "action": "click",
+      "scroll": {
+        "do_scroll": false,
+        "scroll_value": 0
+      }
+    }
+  ]
+}

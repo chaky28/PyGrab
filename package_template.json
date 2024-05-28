@@ -1,0 +1,80 @@
+{
+  "general": {
+    "package": {
+      "name": "Test1",
+      "type": "BROWSER"
+    },
+    "browser": {
+      "version": 1,
+      "size": "1600x1600",
+      "headless": false
+    },
+    "export": {
+      "encoding": "UTF8",
+      "format": "CSV"
+    }
+  },
+  "input_data": {
+    "type": "list",
+    "value": [
+      "https://www.cetrogar.com.ar/electrodomesticos/climatizacion/calefaccion.html",
+      "https://www.cetrogar.com.ar/electrodomesticos/heladeras-y-freezers/heladeras.html",
+      "https://www.cetrogar.com.ar/tecnologia/celulares-accesorios/smartphones.html"
+    ]
+  },
+  "items": [
+    {
+      "type": "grabber_list",
+      "locator": {
+        "type": "XPATH",
+        "value": "//OL[contains(@class,'products items')]/LI"
+      },
+      "name": "GrList",
+      "items": [
+          {
+            "type": "grabber",
+            "name": "_ID",
+            "locator": {
+              "type": "XPATH",
+              "value": ".//DIV[@data-product-id]",
+              "attribute": "data-product-id"
+            }
+          },
+          {
+            "type": "grabber",
+            "name": "_PRODUCT",
+            "locator": {
+              "type": "XPATH",
+              "value": ".//DIV[@class=\"product name product-item-name\"]"
+            }
+          },
+          {
+            "type": "grabber",
+            "name": "_SALESPRICE",
+            "locator": {
+              "type": "XPATH",
+              "value": ".//span[@class='old-price']//span[@class='price']"
+            }
+          },
+          {
+            "type": "grabber",
+            "name": "_PRICE",
+            "locator": {
+              "type": "XPATH",
+              "value": ".//div[@class='price-section'][not(//span[@class='old-price']//span[@class='price'])]//span[@class='price']"
+            }
+          }
+        ]
+    },
+    {
+      "name": "Pagination",
+      "type": "pagination",
+      "locator": {
+        "type": "XPATH",
+        "value": "//div[@class='column main']/div[last()]//li[@class='item pages-item-next']/a"
+      },
+      "repeat_grabber_list": "GrList",
+      "action": "click"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+
+DB_NAME = "pygr"
+DB_HOST_DEV = "localhost"
+DB_PORT_DEV = "5433"
+DB_USER_DEV = "postgres"
+DB_PASSWORD_DEV = "25898"
+
+
+BROWSER_MODE = "BROWSER"
+CRAWLER_MODE = "CRAWLER"
+
+URL_LIST_TYPE = "list"
+
+EXPORT_FORMATS = ["CSV", "EXCEL"]
+
+GRABBER_TYPE = "grabber"
+GRABBER_LIST_TYPE = "grabber_list"
+PAGINATION_TYPE = "pagination"
+NAVIGATION_TYPE = "navigation"
+
+
+DEFAULT_EXPORT_ENCODING = "utf8"
+

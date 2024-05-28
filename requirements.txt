@@ -1,0 +1,7 @@
+flask
+selenium
+webdriver-manager
+eventlet
+pandas
+psycopg2
+python-benedict

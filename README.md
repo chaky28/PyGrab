@@ -1,2 +1,2 @@
-# PyGrab
-Python Web Scraper
+# WebPicker
+Scraping web app. 
