@@ -34,9 +34,9 @@ class Grabber:
 
             transformation = self._definition.get("transformation")
             if transformation is not None:
-                scraped_data = Transformer(scraped_data, transformation)
+                scraped_data = Transformer(transformation, scraped_data).do()
 
             return {item_name: scraped_data.strip()}
 
         except Exception as e:
-            return ""
+            raise e

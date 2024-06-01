@@ -1,7 +1,5 @@
 from ... import item_processor as it_pr
-from pygr.locator import Locator
-from pygr.navigations.click import Click
-
+from ..navigation import Navigation
 
 class Pagination:
     def __init__(self, definition, parent_name, items):
@@ -21,20 +19,12 @@ class Pagination:
                 if item.get("type") == "grabber_list":
                     return self.get_grabber_list_to_repeat(item.get("items", []))
 
-    def paginate(self, browser, element):
-        pag_type = self._def.get("action")
-
-        if self._def.get("action") == "click":
-            return Click(self._def, element).do()
-
-        return False
-
     def process(self, browser, element, result):
         try:
             pagination_count = 0
             grabber_list = self.get_grabber_list_to_repeat()
 
-            while self.paginate(browser, element):
+            while Navigation(self._def, browser, element).do():
 
                 pagination_name = self._def.get("name")
                 parent_name = f"{self._parent_name}_{pagination_name}{pagination_count}"

@@ -1,4 +1,5 @@
-import os.path
+import pathlib
+import os
 import pandas as pd
 import datetime as dt
 from pygr.common import DEFAULT_EXPORT_ENCODING
@@ -9,16 +10,27 @@ def get_timestamp():
     return now
 
 
+def make_directory(rel_path):
+    abs_path = os.path.join(os.path.abspath("."), rel_path)
+    pathlib.Path(abs_path).mkdir(parents=True, exist_ok=True)
+
+
 class BaseData:
     def __init__(self, data):
         self._data = data
 
-    def to_csv(self, path, create_dir=False, encoding=DEFAULT_EXPORT_ENCODING):
-        self._do_to_csv(path, create_dir, encoding)
+    def to_csv(self, path, encoding=DEFAULT_EXPORT_ENCODING):
+        self._do_to_csv(path, encoding)
+
+    def to_excel(self, path, encoding=DEFAULT_EXPORT_ENCODING):
+        self._do_to_excel(path, encoding)
 
     # ------------------------ Child class methods ------------------------
 
-    def _do_to_csv(self, path, create_dir, encoding):
+    def _do_to_csv(self, path, encoding):
+        raise Exception("Not implemented.")
+
+    def _do_to_excel(self, path, encoding):
         raise Exception("Not implemented.")
 
 
@@ -47,14 +59,21 @@ class Data(BaseData):
                 result.append(export_result)
         return result
 
-    def _do_to_csv(self, path, create_dir, encoding):
-        print(self._data)
+    def _do_to_csv(self, path, encoding):
         data = self._do_normalize_data()
         df = pd.DataFrame(columns=self._column_names, data=data)
 
-        path = os.path.join(os.path.abspath("."), path)
-        if create_dir and not os.path.exists(path):
-            os.mkdir(path)
+        make_directory(path)
 
         df.to_csv(f"{os.path.join(path, f'{self._package_name}_{get_timestamp()}.csv')}", index=False,
                   encoding=encoding)
+
+    def _do_to_excel(self, path, encoding):
+        data = self._do_normalize_data()
+        df = pd.DataFrame(columns=self._column_names, data=data)
+
+        make_directory(path)
+
+        df.to_excel(f"{os.path.join(path, f'{self._package_name}_{get_timestamp()}.xlsx')}", index=False)
+
+

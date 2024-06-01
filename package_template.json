@@ -11,7 +11,7 @@
     },
     "export": {
       "encoding": "UTF8",
-      "format": "CSV"
+      "format": "EXCEL"
     }
   },
   "input_data": {
@@ -31,40 +31,106 @@
       },
       "name": "GrList",
       "items": [
-          {
-            "type": "grabber",
-            "name": "_ID",
-            "locator": {
-              "type": "XPATH",
-              "value": ".//DIV[@data-product-id]",
-              "attribute": "data-product-id"
-            }
-          },
-          {
-            "type": "grabber",
-            "name": "_PRODUCT",
-            "locator": {
-              "type": "XPATH",
-              "value": ".//DIV[@class=\"product name product-item-name\"]"
-            }
-          },
-          {
-            "type": "grabber",
-            "name": "_SALESPRICE",
-            "locator": {
-              "type": "XPATH",
-              "value": ".//span[@class='old-price']//span[@class='price']"
-            }
-          },
-          {
-            "type": "grabber",
-            "name": "_PRICE",
-            "locator": {
-              "type": "XPATH",
-              "value": ".//div[@class='price-section'][not(//span[@class='old-price']//span[@class='price'])]//span[@class='price']"
-            }
+        {
+          "type": "grabber",
+          "name": "id",
+          "locator": {
+            "type": "XPATH",
+            "value": ".//DIV[@data-product-id]",
+            "attribute": "data-product-id"
           }
-        ]
+        },
+        {
+          "type": "grabber",
+          "name": "name",
+          "locator": {
+            "type": "XPATH",
+            "value": ".//DIV[@class=\"product name product-item-name\"]"
+          }
+        },
+        {
+          "type": "grabber",
+          "name": "price_no_offer",
+          "locator": {
+            "type": "XPATH",
+            "value": ".//span[@class='old-price']//span[@class='price']"
+          },
+          "transformation": {
+            "type": "regex",
+            "value": [
+              {
+                "selection": "([\\d\\.,]+)",
+                "handling": {
+                  "type": "return",
+                  "value": "$1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "grabber",
+          "name": "price",
+          "locator": {
+            "type": "XPATH",
+            "value": ".//div[@class='price-box price-final_price'][not(.//span[@class='special-price-discount'])]/span[2]//span[@class='price']"
+          },
+          "transformation": {
+            "type": "regex",
+            "value": [
+              {
+                "selection": "([\\d\\.,]+)",
+                "handling": {
+                  "type": "return",
+                  "value": "$1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "grabber",
+          "name": "price_offer",
+          "locator": {
+            "type": "XPATH",
+            "value": ".//div[@class='price-section']//span[@class='special-price']//span[@class='price']"
+          },
+          "transformation": {
+            "type": "regex",
+            "value": [
+              {
+                "selection": "([\\d\\.,]+)",
+                "handling": {
+                  "type": "return",
+                  "value": "$1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "grabber_internal",
+          "name": "Loaded URL",
+          "locator": {
+            "type": "loaded_url"
+          }
+        },
+        {
+          "type": "grabber_internal",
+          "name": "Starting URL",
+          "locator": {
+            "type": "starting_url"
+          }
+        },
+        {
+          "type": "grabber_internal",
+          "name": "Scraped Time",
+          "locator": {
+            "type": "datetime"
+          },
+          "format": "%d/%m/%Y %H:%M:%S:%f"
+        }
+      ]
     },
     {
       "name": "Pagination",

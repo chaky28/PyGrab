@@ -1,5 +1,5 @@
 from benedict import benedict
-from pygr.common import GRABBER_TYPE, GRABBER_LIST_TYPE
+from pygr.common import GRABBER_TYPE, GRABBER_LIST_TYPE, ITEMS_THAT_EXPORT
 
 
 class BaseDefinition:
@@ -46,7 +46,7 @@ class Definition(BaseDefinition):
         for item in items:
             item_name = item.get("name")
             item_type = item.get("type")
-            if item_type == GRABBER_TYPE and item_name not in result:
+            if item_type in ITEMS_THAT_EXPORT and item_name not in result:
                 result.append(item_name)
 
             if item_type == GRABBER_LIST_TYPE:

@@ -5,3 +5,4 @@ eventlet
 pandas
 psycopg2
 python-benedict
+openpyxl

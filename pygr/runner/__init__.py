@@ -2,9 +2,9 @@ from pygr.browser import Browser
 from pygr.runner.options import Options
 from pygr.item_processor import ItemProcessor
 from pygr.definition import Definition
-from pygr.common import URL_LIST_TYPE
+from pygr.common import URL_LIST_TYPE, EXCEL_EXPORT_FORMAT, CSV_EXPORT_FORMAT
 from pygr.data import Data
-from pygr.navigations.load_url import LoadUrl
+from pygr.item_processor.navigation import Navigation
 
 
 class Runner:
@@ -32,11 +32,18 @@ class Runner:
             column_names = self._def.get_column_names()
 
             for i, url in enumerate(urls):
-                LoadUrl({"nav_type": "fixed_url", "url": url}, browser).do()
+
+                Navigation(Definition({"action": "load_url", "url": {"type": "fixed", "value": url,
+                                                                     "is_starting": True}}),
+                           browser, browser.browser).do()
 
                 result = ItemProcessor(self._def.list("items")).process(browser)
 
-                Data(package_name, result, column_names).to_csv(f"exports/{package_name}", create_dir=True)
+                export_format = self._def.get("general.export.format")
+                if export_format == EXCEL_EXPORT_FORMAT:
+                    Data(package_name, result, column_names).to_excel(f"exports/{package_name}")
+                if export_format == CSV_EXPORT_FORMAT:
+                    Data(package_name, result, column_names).to_csv(f"exports/{package_name}")
 
             browser.close_browser()
 
