@@ -13,8 +13,8 @@ class BaseDefinition:
     def list(self, path):
         return self._do_list(path)
 
-    def get_column_names(self):
-        return self._do_get_colum_names()
+    def get_column_names(self, logger):
+        return self._do_get_colum_names(logger)
 
     # ------------------------ Child class methods ------------------------
 
@@ -24,7 +24,7 @@ class BaseDefinition:
     def _do_list(self, path):
         raise Exception("Not implemented.")
 
-    def _do_get_colum_names(self):
+    def _do_get_colum_names(self, logger):
         raise Exception("Not implemented.")
 
 
@@ -38,18 +38,23 @@ class Definition(BaseDefinition):
     def _do_list(self, path):
         return self._def.get_list(path)
 
-    def _do_get_colum_names(self, items=None):
-        if not items:
-            items = self._def.get_list("items")
+    def _do_get_colum_names(self, logger, items=None):
+        try:
+            logger.log("Getting column names...")
+            if not items:
+                items = self._def.get_list("items")
 
-        result = []
-        for item in items:
-            item_name = item.get("name")
-            item_type = item.get("type")
-            if item_type in ITEMS_THAT_EXPORT and item_name not in result:
-                result.append(item_name)
+            result = []
+            for item in items:
+                item_name = item.get("name")
+                item_type = item.get("type")
+                if item_type in ITEMS_THAT_EXPORT and item_name not in result:
+                    result.append(item_name)
 
-            if item_type == GRABBER_LIST_TYPE:
-                result = result + self._do_get_colum_names(item.get_list("items"))
+                if item_type == GRABBER_LIST_TYPE:
+                    result = result + self._do_get_colum_names(logger, item.get_list("items"))
 
-        return result
+            return result
+        except Exception as e:
+            logger.alert(f"Failed getting column names. Error {e}")
+            return []

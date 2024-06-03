@@ -12,7 +12,7 @@ class GrabberList:
         elements = Locator(self._def.get("locator")).process(element, find_all=True)
         return len(elements) != 0
 
-    def process(self, browser, element, result):
+    def process(self, browser, element, result, logger):
         try:
             elements = Locator(self._def.get("locator")).process(element, find_all=True)
             if len(elements) != 0:
@@ -20,6 +20,6 @@ class GrabberList:
                     items = self._def.get("items")
                     name = self._def.get("name")
                     it_pr.ItemProcessor(items).get_item_list_data(browser, f'{self._parent_name}_{name}-{i}', result,
-                                                                  l_elem)
+                                                                  logger, l_elem)
         except Exception as e:
             raise e

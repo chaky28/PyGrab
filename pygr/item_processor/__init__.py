@@ -10,12 +10,12 @@ class ItemProcessor:
     def __init__(self, items):
         self._items = items
 
-    def process(self, browser):
+    def process(self, browser, logger):
         result = {}
-        self.get_item_list_data(browser, "main-0", result)
+        self.get_item_list_data(browser, "main-0", result, logger)
         return result
 
-    def get_item_list_data(self, browser, parent_name, result, element=None, items=None):
+    def get_item_list_data(self, browser, parent_name, result, logger, element=None, items=None):
         if not element:
             element = browser.browser
         if not items:
@@ -35,15 +35,15 @@ class ItemProcessor:
                 grabber_list_obj = grabber_list.GrabberList(item, parent_name)
                 if grabber_list_obj.has_elements(element):
                     does_grabber_list_exists = True
-                    grabber_list_obj.process(browser, element, result)
+                    grabber_list_obj.process(browser, element, result, logger)
 
             if item_type == PAGINATION_TYPE:
                 pagination_obj = pagination.Pagination(item, parent_name, self._items)
-                pagination_obj.process(browser, element, result)
+                pagination_obj.process(browser, element, result, logger)
 
             if item_type == NAVIGATION_TYPE:
                 navigation_obj = navigation.Navigation(item, browser, element)
-                navigation_obj.do()
+                navigation_obj.do(logger)
 
             if item_type == GRABBER_INTERNAL_TYPE:
                 grabber_internal_obj = grabber_internal.GrabberInternal(item, browser)

@@ -1,3 +1,4 @@
+import os
 
 DB_NAME = "pygr"
 DB_HOST_DEV = "localhost"
@@ -35,4 +36,7 @@ DEFAULT_EXPORT_ENCODING = "utf8"
 DEFAULT_DATETIME_FORMAT = "%m/%d/%Y %H:%M:%S:%f"
 
 REGEX_TR_TYPE = "regex"
+
+LOGS_FILE_PATH = "logs"
+LOG_SEPARATOR = "--------------------------------------------------------------------------------------------------"
 

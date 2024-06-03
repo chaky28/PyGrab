@@ -23,8 +23,10 @@ class Browser:
     def update_browser_status(self, status):
         self._browser_status = status
 
-    def load_url(self, url: str, save_as_starting=False):
+    def load_url(self, url: str, logger, save_as_starting=False):
         try:
+            logger.log(f"Loading URL {url}")
+
             self.update_browser_status("Loading")
             self.browser.get(url)
             self.update_browser_status("Loaded")
@@ -33,6 +35,7 @@ class Browser:
                 self.starting_url = url
 
         except Exception as e:
+            logger.alert(f"Failed loading url. Error {e}")
             self.update_browser_status("Error")
             raise e
 

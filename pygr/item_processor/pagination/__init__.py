@@ -19,16 +19,16 @@ class Pagination:
                 if item.get("type") == "grabber_list":
                     return self.get_grabber_list_to_repeat(item.get("items", []))
 
-    def process(self, browser, element, result):
+    def process(self, browser, element, result, logger):
         try:
             pagination_count = 0
             grabber_list = self.get_grabber_list_to_repeat()
 
-            while Navigation(self._def, browser, element).do():
+            while Navigation(self._def, browser, element).do(logger):
 
                 pagination_name = self._def.get("name")
                 parent_name = f"{self._parent_name}_{pagination_name}{pagination_count}"
-                it_pr.ItemProcessor([grabber_list]).get_item_list_data(browser, parent_name, result)
+                it_pr.ItemProcessor([grabber_list]).get_item_list_data(browser, parent_name, result, logger)
 
                 pagination_count += 1
         except Exception as e:

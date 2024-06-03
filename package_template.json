@@ -14,11 +14,12 @@
       "format": "EXCEL"
     }
   },
+  "log": {
+    "datetime_format": "%d/%m/%Y %H:%M:%S:%f"
+  },
   "input_data": {
     "type": "list",
     "value": [
-      "https://www.cetrogar.com.ar/electrodomesticos/climatizacion/calefaccion.html",
-      "https://www.cetrogar.com.ar/electrodomesticos/heladeras-y-freezers/heladeras.html",
       "https://www.cetrogar.com.ar/tecnologia/celulares-accesorios/smartphones.html"
     ]
   },
