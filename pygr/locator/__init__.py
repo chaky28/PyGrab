@@ -8,7 +8,7 @@ class Locator:
         self.locator_type = definition.get("type")
         self.locator_value = definition.get("value")
 
-    def process(self, element, find_all=False):
+    def process(self, element, logger, find_all=False):
         try:
             by_value = get_by_locator_value(self.locator_type)
             selection = element.find_elements(by=by_value, value=self.locator_value)
@@ -22,6 +22,7 @@ class Locator:
 
             return selection[0]
         except Exception as e:
+            logger.alert(f"Failed locating. Locator type {self.locator_type} and value {self.locator_value}. Error {e}")
             if find_all:
                 return []
             return None

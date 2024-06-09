@@ -1,9 +1,9 @@
 from pygr.locator import Locator
 from pygr.transformer import Transformer
-from selenium.webdriver.remote.webelement import WebElement
+from pygr.common import DEFAULT_ITEM_NAME
 
 
-def get_data_from_item(item, attribute):
+def get_data_from_item(item, attribute, logger):
     try:
         if attribute is not None:
             if attribute == "innerText":
@@ -13,7 +13,7 @@ def get_data_from_item(item, attribute):
             return item.get_attribute(attribute).strip()
         return item.get_property("textContent").strip()
     except Exception as e:
-        print(type(e))
+        logger.alert(f"Failed getting data from web element. Error {e}.")
         return ""
 
 
@@ -22,21 +22,25 @@ class Grabber:
         self._definition = definition
         self._element_to_grab_from = element_to_grab_from
 
-    def process(self):
+    def process(self, logger):
+        item_name = self._definition.get("name", DEFAULT_ITEM_NAME)
         try:
-            item_name = self._definition.get("name", "")
             scraped_data = ""
 
-            item = Locator(self._definition.get("locator")).process(self._element_to_grab_from)
+            item = Locator(self._definition.get("locator")).process(self._element_to_grab_from, logger)
             if item is not None:
                 attribute = self._definition.get("locator.attribute")
-                scraped_data = get_data_from_item(item, attribute)
+                scraped_data = get_data_from_item(item, attribute, logger)
 
             transformation = self._definition.get("transformation")
             if transformation is not None:
-                scraped_data = Transformer(transformation, scraped_data).do()
+                scraped_data = Transformer(transformation, scraped_data).do(logger)
+
+            if scraped_data == "":
+                logger.warning(f"No data was produced for item '{item_name}'.")
 
             return {item_name: scraped_data.strip()}
 
         except Exception as e:
-            raise e
+            logger.alert(f"Failed grabbing data. Item {item_name}. Error {e}.")
+            return {item_name: ""}

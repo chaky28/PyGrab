@@ -22,7 +22,7 @@ class Click(BaseClick):
 
     def _do_do(self, logger):
         try:
-            element = Locator(self._def.get("locator")).process(self._element)
+            element = Locator(self._def.get("locator")).process(self._element, logger)
             if not element:
                 logger.warning("No element found to click on.")
                 return False

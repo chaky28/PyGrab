@@ -35,12 +35,14 @@ class BaseData:
 
 
 class Data(BaseData):
-    def __init__(self, pacakge_name, data, column_names):
+    def __init__(self, pacakge_name, data, column_names, logger):
         super().__init__(data)
         self._package_name = pacakge_name
         self._column_names = column_names
+        self.logger = logger
 
     def _do_normalize_data(self):
+        self.logger.log(f"Normalizing data for export.")
         result = []
         for key, value in self._data.items():
             if "#EXPORT" in key:
@@ -60,20 +62,36 @@ class Data(BaseData):
         return result
 
     def _do_to_csv(self, path, encoding):
-        data = self._do_normalize_data()
-        df = pd.DataFrame(columns=self._column_names, data=data)
+        try:
+            self.logger.log("Generating CSV...")
 
-        make_directory(path)
+            data = self._do_normalize_data()
+            df = pd.DataFrame(columns=self._column_names, data=data)
 
-        df.to_csv(f"{os.path.join(path, f'{self._package_name}_{get_timestamp()}.csv')}", index=False,
-                  encoding=encoding)
+            make_directory(path)
+            full_path = os.path.join(path, f'{self._package_name}_{get_timestamp()}.csv')
+
+            df.to_csv(f"{full_path}", index=False,
+                      encoding=encoding)
+
+            self.logger.log(f"Successfully generated CSV in location {full_path}", separator=True)
+        except Exception as e:
+            self.logger.alert(f"Failed to generate CSV. Error {e}.", separator=True)
 
     def _do_to_excel(self, path, encoding):
-        data = self._do_normalize_data()
-        df = pd.DataFrame(columns=self._column_names, data=data)
+        try:
+            self.logger.log("Generating EXCEL...")
 
-        make_directory(path)
+            data = self._do_normalize_data()
+            df = pd.DataFrame(columns=self._column_names, data=data)
 
-        df.to_excel(f"{os.path.join(path, f'{self._package_name}_{get_timestamp()}.xlsx')}", index=False)
+            make_directory(path)
+            full_path = os.path.join(path, f'{self._package_name}_{get_timestamp()}.xlsx')
+
+            df.to_excel(f"{full_path}", index=False)
+
+            self.logger.log("Successfully generated EXCEL.", separator=True)
+        except Exception as e:
+            self.logger.alert(f"Failed to generate EXCEL. Error {e}.", separator=True)
 
 

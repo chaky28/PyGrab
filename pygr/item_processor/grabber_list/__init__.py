@@ -8,13 +8,13 @@ class GrabberList:
         self._def = definition
         self._parent_name = parent_name
 
-    def has_elements(self, element):
-        elements = Locator(self._def.get("locator")).process(element, find_all=True)
+    def has_elements(self, element, logger):
+        elements = Locator(self._def.get("locator")).process(element, logger, find_all=True)
         return len(elements) != 0
 
     def process(self, browser, element, result, logger):
         try:
-            elements = Locator(self._def.get("locator")).process(element, find_all=True)
+            elements = Locator(self._def.get("locator")).process(element, logger, find_all=True)
             if len(elements) != 0:
                 for i, l_elem in enumerate(elements):
                     items = self._def.get("items")

@@ -25,6 +25,7 @@ class Runner:
                 self.run_browser(browser, logger)
 
     def run_crawler(self, logger):
+        logger.log("Crawler mode not implemented yet.")
         return ""
 
     def run_browser(self, browser, logger):
@@ -39,24 +40,32 @@ class Runner:
             logger.log(f"Column names found '{', '.join(column_names)}'", separator=True)
 
             for i, url in enumerate(urls):
+
+                # Navigate to the url to extract the data from
                 nav_settings = {"action": "load_url",
                                 "url": {"type": "fixed", "value": url, "is_starting": True},
                                 "name": "Internal load starting URL"}
                 Navigation(Definition(nav_settings), browser, browser.browser).do(logger)
 
+                # Process items and extract data
                 result = ItemProcessor(self._def.list("items")).process(browser, logger)
 
+                # Manage export
                 export_format = self._def.get("general.export.format")
                 if export_format == EXCEL_EXPORT_FORMAT:
-                    Data(package_name, result, column_names).to_excel(f"exports/{package_name}")
+                    Data(package_name, result, column_names, logger).to_excel(f"exports/{package_name}")
                 if export_format == CSV_EXPORT_FORMAT:
-                    Data(package_name, result, column_names).to_csv(f"exports/{package_name}")
+                    Data(package_name, result, column_names, logger).to_csv(f"exports/{package_name}")
+
+                # Delete result just in case it is not garbage collected
+                del result
 
             browser.close_browser()
 
         except Exception as e:
-            browser.close_browser()
-            raise e
+            if browser is not None:
+                browser.close_browser()
+            logger.log(f"Failed running definition. Error {e}")
 
     def get_urls(self, logger):
         logger.log("Getting URLs to run.")
