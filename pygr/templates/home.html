@@ -1,13 +1,31 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <title>PyGrab</title>
 </head>
+
 <body>
- HELLO WORLD!!
+    <div class="main-frame">
+        <div class="general-settings-container"></div>
+        <div class="edit-item"></div>
+        <div class="items-container">
+            <div class="items__add-item">+</div>
+        </div>
+        <div class="definition-container">
+            <textarea name="definition" id="definition" placeholder="Definition"></textarea>
+        </div>
+    </div>
+    <script src="/static/js/home.js" type="module"></script>
 </body>
+
 </html>

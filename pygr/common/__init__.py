@@ -40,3 +40,31 @@ REGEX_TR_TYPE = "regex"
 LOGS_FILE_PATH = "logs"
 LOG_SEPARATOR = "--------------------------------------------------------------------------------------------------"
 
+POSTGRES_CONN_TYPE = "postgres"
+
+MAX_RETRIES = 20
+
+# -------------------------- Browser and Log variables for UI --------------------------
+
+browser_ui = None
+log_filepath = ""
+
+
+def set_browser_ui(browser):
+    global browser_ui
+    browser_ui = browser
+
+
+def get_browser_ui():
+    global browser_ui
+    return browser_ui
+
+
+def set_log_filepath(filepath):
+    global log_filepath
+    log_filepath = filepath
+
+
+def get_log_filepath():
+    global log_filepath
+    return log_filepath

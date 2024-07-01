@@ -2,22 +2,23 @@ from selenium.webdriver import ChromeOptions
 from pygr.definition import Definition
 
 
-def get_default_options():
+def get_default_options(is_headless=True):
     driver_option = ChromeOptions()
     driver_option.add_argument("--disable-dev-shm-usage")
     driver_option.add_argument('--ignore-ssl-errors=yes')
     driver_option.add_argument('--ignore-certificate-errors')
-    # driver_option.add_argument('--headless')
     driver_option.add_argument("--window-size=1600,1600")
     driver_option.add_argument("--disable-application-cache")
     driver_option.add_argument("--no-sandbox")
     driver_option.add_argument("--lang=en")
+    if is_headless:
+        driver_option.add_argument('--headless')
     return driver_option
 
 
 class Options:
-    def __init__(self):
-        self._driver_options = get_default_options()
+    def __init__(self, is_headless=False):
+        self._driver_options = get_default_options(is_headless)
 
     def get(self, definition: Definition):
         options = definition.get("general.browser")
